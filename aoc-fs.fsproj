@@ -2,8 +2,14 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>aoc_fs</RootNamespace>
+        <Version>0.0.1</Version>
+        <Authors>Vest</Authors>
+        <RepositoryUrl>https://github.com/Vest/aoc-fs</RepositoryUrl>
+        <PackageTags>advent-of-code, aoc</PackageTags>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

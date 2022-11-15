@@ -11,3 +11,5 @@ _ReSharper*/
 # JetBrains Rider
 .idea/
 *.sln.iml
+.fake
+aoc-test/TestResults/*

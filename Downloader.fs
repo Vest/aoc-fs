@@ -1,15 +1,17 @@
 ﻿module aoc.Downloader
 
-open FSharp.Data
+open System.Runtime.CompilerServices
 
-let private adventUrl (year : uint, day : uint) : string = $"https://adventofcode.com/{year}/day/{day}/input"
-let private cookies =
+// open FSharp.Data
+[<assembly: InternalsVisibleTo("aoc-test")>]
+do ()
+
+let advent_cookie = "ADVENT_SESSION"
+let internal adventUrl (year: int) (day: int) : string = $"https://adventofcode.com/{year}/day/{day}/input"
+let internal cookies cookieName: string option =
     try
-        Some(System.Environment.GetEnvironmentVariable "ADVENT_SESSION")
-    with
-        | None
-let inputData year day =
-    match cookies with
-    | Some(cookies) -> Http.RequestString (url = adventUrl (year day), cookies = ["session", cookies])
-    | _ -> ""
-
+        match System.Environment.GetEnvironmentVariable cookieName with
+        | null -> None
+        | cookie -> Some(cookie)        
+    with _ ->
+        None
