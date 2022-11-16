@@ -1,8 +1,8 @@
 ﻿module aoc.Downloader
 
 open System.Runtime.CompilerServices
+open FSharp.Data
 
-// open FSharp.Data
 [<assembly: InternalsVisibleTo("aoc-test")>]
 do ()
 
@@ -12,6 +12,9 @@ let internal cookies cookieName: string option =
     try
         match System.Environment.GetEnvironmentVariable cookieName with
         | null -> None
-        | cookie -> Some(cookie)        
+        | cookie -> Some cookie
     with _ ->
         None
+
+let internal downloadUrlWithCookie cookie url =
+    Http.RequestString(url, cookies = ["session", cookie], silentHttpErrors = true)
