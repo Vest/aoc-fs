@@ -18,3 +18,10 @@ let internal cookies cookieName: string option =
 
 let internal downloadUrlWithCookie cookie url =
     Http.RequestString(url, cookies = ["session", cookie], silentHttpErrors = true)
+
+let downloadInput year day : string option =
+    match cookies advent_cookie with
+    | Some cookie -> adventUrl year day |> downloadUrlWithCookie cookie |> Some
+    | None ->
+        printfn $"No session was provided, please use environment variable {advent_cookie}"
+        None
