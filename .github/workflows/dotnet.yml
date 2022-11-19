@@ -21,5 +21,9 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
+      - name: Prepare Coveralls.io
+        run: dotnet new tool-manifest
+      - run: dotnet tool install coveralls.net
+      - run: dotnet tool run csmacnz.Coveralls
       - name: Test
         run: dotnet test --no-build --verbosity normal
