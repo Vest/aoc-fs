@@ -14,6 +14,7 @@
 
     <ItemGroup>
         <Compile Include="Downloader.fs" />
+        <Compile Include="InputCaching.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
