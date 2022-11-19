@@ -24,6 +24,5 @@ jobs:
       - name: Prepare Coveralls.io
         run: dotnet new tool-manifest
       - run: dotnet tool install coveralls.net
-      - run: dotnet tool run csmacnz.Coveralls
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=json,cobertura,lcov,teamcity,opencover
