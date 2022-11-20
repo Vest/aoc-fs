@@ -24,3 +24,13 @@ let ``Read existing input`` () =
         Assert.Equal(Some "test", input)
     finally
         System.IO.Directory.Delete("input", true)
+
+[<Fact>]
+let ``Write new input and read it`` () =
+    try
+        writeInput 2022 7 "Test"
+        let input = readInput 2022 7
+
+        Assert.Equal(Some "Test", input)
+    finally
+        System.IO.Directory.Delete("input", true)

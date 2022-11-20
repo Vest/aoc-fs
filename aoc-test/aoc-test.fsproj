@@ -10,9 +10,8 @@
     <PackageTags>advent-of-code, aoc</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DownloaderTests.fs" />
     <Compile Include="InputCachingTests.fs" />
-    <Compile Include="Tests.fs" />
+    <Compile Include="DownloaderTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
