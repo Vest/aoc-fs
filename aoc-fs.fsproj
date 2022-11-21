@@ -13,7 +13,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="InputCaching.fs" />
         <Compile Include="Downloader.fs" />
+        <Compile Include="Input.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 

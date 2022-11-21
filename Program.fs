@@ -1,4 +1,8 @@
-﻿open aoc.Downloader
+﻿open aoc.Input
 
-printfn "Hello from F#"
-printfn $"Downloaded input: %A{downloadInput 2021 7 }"
+printfn "Hello from aoc-fs"
+
+let input = readDay 2021 6
+match input with
+| Some input -> printfn $"Read input: '{input}'"
+| None -> printfn "Nothing was found :("
