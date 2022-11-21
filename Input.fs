@@ -9,6 +9,7 @@ let readDay (year: int) (day: int) : string option =
     | None ->
         match downloadInput year day with
         | Some input ->
+            let input = input.Trim()
             writeInput year day input
             Some input
         | None ->

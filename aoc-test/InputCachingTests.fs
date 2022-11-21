@@ -34,3 +34,13 @@ let ``Write new input and read it`` () =
         Assert.Equal(Some "Test", input)
     finally
         System.IO.Directory.Delete("input", true)
+
+[<Fact>]
+let ``Write new input and read it trimmed`` () =
+    try
+        writeInput 2022 7 "Test\n  "
+        let input = readInput 2022 7
+
+        Assert.Equal(Some "Test", input)
+    finally
+        System.IO.Directory.Delete("input", true)

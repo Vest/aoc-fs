@@ -20,7 +20,7 @@ let readInput (year: int) (day: int) : string option =
             None
     | false -> None
 
-let writeInput (year: int) (day: int) (input: string) : unit  =
+let writeInput (year: int) (day: int) (input: string) : unit =
     let path = inputFile year day
 
     match File.Exists path with
@@ -28,7 +28,7 @@ let writeInput (year: int) (day: int) (input: string) : unit  =
     | false -> ()
 
     try
-        Directory.CreateDirectory "input/2022" |> ignore
-        File.WriteAllText(path, input)
+        Directory.CreateDirectory $"input/{year}" |> ignore
+        File.WriteAllText(path, input.Trim())
     with e ->
         eprintfn $"An exception occured, while reading the file '{path}': {e.Message}\n{e.StackTrace}"

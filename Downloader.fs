@@ -7,8 +7,11 @@ open FSharp.Data
 do ()
 
 let advent_cookie = "ADVENT_SESSION"
-let internal adventUrl (year: int) (day: int) : string = $"https://adventofcode.com/{year}/day/{day}/input"
-let internal cookies cookieName: string option =
+
+let internal adventUrl (year: int) (day: int) : string =
+    $"https://adventofcode.com/{year}/day/{day}/input"
+
+let internal cookies cookieName : string option =
     try
         match System.Environment.GetEnvironmentVariable cookieName with
         | null -> None
@@ -17,7 +20,7 @@ let internal cookies cookieName: string option =
         None
 
 let internal downloadUrlWithCookie cookie url =
-    Http.RequestString(url, cookies = ["session", cookie], silentHttpErrors = true)
+    Http.RequestString(url, cookies = [ "session", cookie ], silentHttpErrors = true)
 
 let downloadInput year day : string option =
     match cookies advent_cookie with
