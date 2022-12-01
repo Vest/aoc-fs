@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>aoc_fs</RootNamespace>
-    <Version>0.0.1</Version>
-    <Authors>Vest</Authors>
-    <RepositoryUrl>https://github.com/Vest/aoc-fs</RepositoryUrl>
-    <PackageTags>advent-of-code, aoc</PackageTags>
-    <AssemblyVersion>0.0.1</AssemblyVersion>
-    <FileVersion>0.0.1</FileVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="2022\Day1.fs" />
-    <Compile Include="2021\Day1.fs" />
-    <Compile Include="InputCaching.fs" />
-    <Compile Include="Downloader.fs" />
-    <Compile Include="Input.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FSharp.Data" Version="6.0.1-beta001" />
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>aoc_fs</RootNamespace>
+        <Version>0.0.1</Version>
+        <Authors>Vest</Authors>
+        <RepositoryUrl>https://github.com/Vest/aoc-fs</RepositoryUrl>
+        <PackageTags>advent-of-code, aoc</PackageTags>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="2022\Day1.fs"/>
+        <Compile Include="2021\Day1.fs"/>
+        <Compile Include="InputCaching.fs"/>
+        <Compile Include="Downloader.fs"/>
+        <Compile Include="Input.fs"/>
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FSharp.Data" Version="6.0.1-beta001"/>
+    </ItemGroup>
 </Project>

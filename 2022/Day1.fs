@@ -20,9 +20,9 @@ let answer1 (input: string) : int =
                 (index.Value, 0))
         |> Seq.groupBy fst
         |> Seq.map snd
-        |> Seq.map (fun elfCalories ->
-            elfCalories |> Seq.map snd |> Seq.sum)
+        |> Seq.map (fun elfCalories -> elfCalories |> Seq.map snd |> Seq.sum)
         |> Seq.max
+
     answer
 
 let answer2 (input: string) : int =
@@ -43,9 +43,9 @@ let answer2 (input: string) : int =
                 (index.Value, 0))
         |> Seq.groupBy fst
         |> Seq.map snd
-        |> Seq.map (fun elfCalories ->
-            elfCalories |> Seq.map snd |> Seq.sum)
+        |> Seq.map (fun elfCalories -> elfCalories |> Seq.map snd |> Seq.sum)
         |> Seq.sortDescending
         |> Seq.take 3
         |> Seq.sum
+
     answer
