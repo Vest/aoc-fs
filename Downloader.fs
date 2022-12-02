@@ -1,7 +1,9 @@
 ﻿module aoc.Downloader
 
+open System.Net
 open System.Runtime.CompilerServices
 open FSharp.Data
+open FSharp.Data.HttpRequestHeaders
 
 [<assembly: InternalsVisibleTo("aoc-test")>]
 do ()
@@ -20,11 +22,19 @@ let internal cookies cookieName : string option =
         None
 
 let internal downloadUrlWithCookie cookie url =
-    Http.RequestString(url, cookies = [ "session", cookie ], silentHttpErrors = true)
+    Http.RequestString(url,
+                       cookies = [ "session", cookie ],
+                       silentHttpErrors = false,
+                       headers = [ Accept HttpContentTypes.Any; UserAgent "https://github.com/Vest/aoc-fs/" ])
 
 let downloadInput year day : string option =
     match cookies advent_cookie with
-    | Some cookie -> adventUrl year day |> downloadUrlWithCookie cookie |> Some
+    | Some cookie ->
+        try
+            adventUrl year day |> downloadUrlWithCookie cookie |> Some
+        with :? WebException as exn ->
+            eprintfn $"Couldn't download the input: {exn.Message}"
+            None
     | None ->
-        printfn $"No session was provided, please use environment variable {advent_cookie}"
+        eprintfn $"No session was provided, please use environment variable {advent_cookie}"
         None
