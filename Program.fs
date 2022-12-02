@@ -12,6 +12,7 @@ let display year day =
     let answer =
         match input, day with
         | Some input, 1 -> (false, $"Day {day} / {year}: {Day1.answer1 input} and {Day1.answer2 input}")
+        | Some input, 2 -> (false, $"Day {day} / {year}: {Day2.answer1 input} and {Day2.answer2 input}")
         | _ -> (true, $"Day {day} / {year}: Sorry, but there is no input for the current day")
 
     displayAnswer (snd answer) (fst answer)
