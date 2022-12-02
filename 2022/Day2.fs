@@ -34,6 +34,23 @@ let internal parseChoice c =
     | 'Z' -> Some Scissors
     | _ -> None
 
+let internal parseWinner c =
+    match c with
+    | 'X' -> Some PlayerLost
+    | 'Y' -> Some Draw
+    | 'Z' -> Some PlayerWon
+    | _ -> None
+
+let internal detectChoice c r =
+    match (c, r) with
+    | (Rock, PlayerWon) -> Paper
+    | (Rock, PlayerLost) -> Scissors
+    | (Paper, PlayerWon) -> Scissors
+    | (Paper, PlayerLost) -> Rock
+    | (Scissors, PlayerWon) -> Rock
+    | (Scissors, PlayerLost) -> Paper
+    | (_, Draw) -> c
+
 let internal score round choice =
     let r =
         match round with
@@ -49,7 +66,7 @@ let internal score round choice =
 
     r + c
 
-let internal parse (input: string) : (Choice * Choice) option =
+let internal parseFirst (input: string) : (Choice * Choice) option =
     if input.Length = 3 then
         let letter1 = input[0]
         let letter2 = input[2]
@@ -60,10 +77,21 @@ let internal parse (input: string) : (Choice * Choice) option =
     else
         None
 
+let internal parseSecond (input: string) : (Choice * Winner) option =
+    if input.Length = 3 then
+        let letter1 = input[0]
+        let letter2 = input[2]
+
+        match (parseChoice letter1, parseWinner letter2) with
+        | (Some ch1, Some ch2) -> Some(ch1, ch2)
+        | _ -> None
+    else
+        None
+
 let answer1 (input: string) : int =
     input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
     |> Array.toSeq
-    |> Seq.map (fun line -> parse line)
+    |> Seq.map (fun line -> parseFirst line)
     |> Seq.map (fun round ->
         match round with
         | Some(elf, player) ->
@@ -73,4 +101,15 @@ let answer1 (input: string) : int =
         | None -> 0)
     |> Seq.sum
 
-let answer2 (input: string) : int = 0
+let answer2 (input: string) : int =
+    input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+    |> Array.toSeq
+    |> Seq.map (fun line -> parseSecond line)
+    |> Seq.map (fun round ->
+        match round with
+        | Some(elf, round) ->
+            let player = detectChoice elf round
+            let score = score round player
+            score
+        | None -> 0)
+    |> Seq.sum
