@@ -1,5 +1,6 @@
 ﻿module aoc_test.DownloaderTests
 
+open System.Net
 open aoc.Downloader
 open Xunit
 
@@ -22,11 +23,9 @@ let ``Cookie should return Some("Cookie")`` () =
 [<Fact>]
 let ``Download with empty cookie`` () =
     let url = adventUrl 2020 7
-    let result = downloadUrlWithCookie "" url
-    Assert.Equal("Puzzle inputs differ by user.  Please log in to get your puzzle input.\n", result)
+    Assert.Throws<WebException>(fun () -> downloadUrlWithCookie "" url |> ignore)
 
 [<Fact>]
 let ``Download with any cookie`` () =
     let url = adventUrl 2020 7
-    let result = downloadUrlWithCookie "Test" url
-    Assert.True(result.Contains("500 Internal Server Error"))
+    Assert.Throws<WebException>(fun () -> downloadUrlWithCookie "Test" url |> ignore)
