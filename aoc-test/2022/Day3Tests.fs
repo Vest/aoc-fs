@@ -26,3 +26,22 @@ let ``First Answer`` () =
         answer1
             "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
     )
+
+[<Fact>]
+let ``Find common items in three rucksacks`` () =
+    Assert.Equal(
+        Some 'r',
+        findCommonItemAmongThree (
+            [ "vJrwpWtwJgWrhcsFMMfFFhFp"
+              "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"
+              "PmmdzqPrVvPwwTWBwg" ]
+        )
+    )
+
+[<Fact>]
+let ``Second Answer`` () =
+    Assert.Equal(
+        70,
+        answer2
+            "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
+    )
