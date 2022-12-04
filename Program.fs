@@ -14,6 +14,7 @@ let display year day =
         | Some input, 1 -> (false, $"Day {day} / {year}: {Day1.answer1 input} and {Day1.answer2 input}")
         | Some input, 2 -> (false, $"Day {day} / {year}: {Day2.answer1 input} and {Day2.answer2 input}")
         | Some input, 3 -> (false, $"Day {day} / {year}: {Day3.answer1 input} and {Day3.answer2 input}")
+        | Some input, 4 -> (false, $"Day {day} / {year}: {Day4.answer1 input} and {Day4.answer2 input}")
         | _ -> (true, $"Day {day} / {year}: Sorry, but there is no input for the current day")
 
     displayAnswer (snd answer) (fst answer)
