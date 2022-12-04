@@ -22,10 +22,12 @@ let internal cookies cookieName : string option =
         None
 
 let internal downloadUrlWithCookie cookie url =
-    Http.RequestString(url,
-                       cookies = [ "session", cookie ],
-                       silentHttpErrors = false,
-                       headers = [ Accept HttpContentTypes.Any; UserAgent "https://github.com/Vest/aoc-fs/" ])
+    Http.RequestString(
+        url,
+        cookies = [ "session", cookie ],
+        silentHttpErrors = false,
+        headers = [ Accept HttpContentTypes.Any; UserAgent "https://github.com/Vest/aoc-fs/" ]
+    )
 
 let downloadInput year day : string option =
     match cookies advent_cookie with

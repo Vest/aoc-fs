@@ -10,16 +10,16 @@
         <PackageTags>advent-of-code, aoc</PackageTags>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="2022\Day2Tests.fs" />
-        <Compile Include="2022\Day3Tests.fs" />
-        <Compile Include="2022\Day4Tests.fs" />
-        <Compile Include="InputCachingTests.fs" />
-        <Compile Include="DownloaderTests.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="2022\Day2Tests.fs"/>
+        <Compile Include="2022\Day3Tests.fs"/>
+        <Compile Include="2022\Day4Tests.fs"/>
+        <Compile Include="InputCachingTests.fs"/>
+        <Compile Include="DownloaderTests.fs"/>
+        <Compile Include="Program.fs"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
+        <PackageReference Include="xunit" Version="2.4.1"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -30,7 +30,7 @@
         </PackageReference>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\aoc-fs.fsproj" />
+        <ProjectReference Include="..\aoc-fs.fsproj"/>
     </ItemGroup>
     <ItemGroup>
         <Reference Include="System.Private.CoreLib">

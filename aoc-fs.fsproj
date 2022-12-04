@@ -11,17 +11,17 @@
         <FileVersion>0.0.1</FileVersion>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="2022\Day1.fs" />
-        <Compile Include="2022\Day2.fs" />
-        <Compile Include="2022\Day3.fs" />
-        <Compile Include="2022\Day4.fs" />
-        <Compile Include="2021\Day1.fs" />
-        <Compile Include="InputCaching.fs" />
-        <Compile Include="Downloader.fs" />
-        <Compile Include="Input.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="2022\Day1.fs"/>
+        <Compile Include="2022\Day2.fs"/>
+        <Compile Include="2022\Day3.fs"/>
+        <Compile Include="2022\Day4.fs"/>
+        <Compile Include="2021\Day1.fs"/>
+        <Compile Include="InputCaching.fs"/>
+        <Compile Include="Downloader.fs"/>
+        <Compile Include="Input.fs"/>
+        <Compile Include="Program.fs"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="FSharp.Data" Version="6.0.1-beta001" />
+        <PackageReference Include="FSharp.Data" Version="6.0.1-beta001"/>
     </ItemGroup>
 </Project>
