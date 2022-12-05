@@ -68,7 +68,7 @@ let ``Push cargo to Map`` () =
     let input = pushToPile cargo 1 (Crate 'C')
 
     let output =
-        Map[(1, [ Crate 'A'; Crate 'C' ])
+        Map[(1, [ Crate 'C'; Crate 'A' ])
             (2, [ Crate 'B' ])]
 
     Assert.Equal(2, List.zip output.[1] input.[1] |> List.filter (fun (a, b) -> a = b) |> List.length)

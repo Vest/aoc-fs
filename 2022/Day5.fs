@@ -32,7 +32,6 @@ let internal parseCrates (line: string) : Crate[] =
     |> Seq.chunkBySize 4
     |> Seq.map (fun crate ->
         let crate = crate |> Seq.toList
-
         match crate with
         | '[' :: c :: ']' :: _ -> Crate c
         | _ -> Empty)
@@ -50,7 +49,7 @@ let internal parseCargo (lines: seq<string>) =
         ||> Seq.fold (fun acc row -> acc @ [ if i >= tempCargo[row].Length then Empty else tempCargo[row][i] ])
         |> List.filter (fun c -> c != Empty)
 
-    ([], [ 0 .. tempCargo.Length - 1 ])
+    ([], [ 0 .. tempCargo[0].Length - 1])
     ||> Seq.fold (fun acc column -> acc @ [ getColumn column ])
 
 let internal parseMovements (lines: seq<string>) =
@@ -93,8 +92,7 @@ let answer1 (input: string) : string =
 
     ([], [ 1 .. res.Count ])
     ||> Seq.fold (fun acc pile ->
-        printfn $"Test{acc}"
-        (res[pile] |> List.head) :: acc)
+        res[pile].Head :: acc)
     |> Seq.map (fun (crate : Crate) ->
         match crate with
         | Crate c -> c
