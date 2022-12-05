@@ -23,9 +23,7 @@ let ``Parse cargo`` () =
         parseCargo [ "    [D]    "; "[N] [C]    "; "[Z] [M] [P]"; " 1   2   3 "; "" ]
 
     let output =
-        [ [ Crate 'N'; Crate 'Z' ]
-          [ Crate 'M'; Crate 'C'; Crate 'D' ]
-          [ Crate 'P'  ] ]
+        [ [ Crate 'N'; Crate 'Z' ]; [ Crate 'M'; Crate 'C'; Crate 'D' ]; [ Crate 'P' ] ]
 
     Assert.Equal(output |> Seq.length, input |> Seq.length)
 
@@ -63,3 +61,68 @@ let ``Pop cargo from Map`` () =
              (2, [ Crate 'B' ])])
 
     Assert.Equal(output, input)
+
+[<Fact>]
+let ``Push cargo to Map`` () =
+    let cargo = Map [ (1, [ Crate 'A' ]); (2, [ Crate 'B' ]) ]
+    let input = pushToPile cargo 1 (Crate 'C')
+
+    let output =
+        Map[(1, [ Crate 'A'; Crate 'C' ])
+            (2, [ Crate 'B' ])]
+
+    Assert.Equal(2, List.zip output.[1] input.[1] |> List.filter (fun (a, b) -> a = b) |> List.length)
+    Assert.Equal(1, List.zip output.[2] input.[2] |> List.filter (fun (a, b) -> a = b) |> List.length)
+
+let ``Push cargo to empty Map`` () =
+    let cargo = Map [ (1, [ Crate 'A' ]); (2, [  ]) ]
+    let input = pushToPile cargo 2 (Crate 'C')
+
+    let output =
+        Map[(1, [ Crate 'A'])
+            (2, [ Crate 'C' ])]
+
+    Assert.Equal(1, List.zip output.[1] input.[1] |> List.filter (fun (a, b) -> a = b) |> List.length)
+    Assert.Equal(1, List.zip output.[2] input.[2] |> List.filter (fun (a, b) -> a = b) |> List.length)
+
+[<Fact>]
+let ``First answer, no changes`` () =
+    let input =
+        answer1
+            "    [D]
+[N] [C]
+[Z] [M] [P]
+ 1   2   3
+"
+
+    Assert.Equal("NDP", input)
+
+[<Fact>]
+let ``First answer, one move`` () =
+    let input =
+        answer1 "    [D]
+[N] [C]
+[Z] [M] [P]
+ 1   2   3
+
+move 1 from 2 to 1
+"
+
+    Assert.Equal("DCP", input)
+
+
+[<Fact>]
+let ``First answer`` () =
+    let input =
+        answer1 "    [D]
+[N] [C]
+[Z] [M] [P]
+ 1   2   3
+
+move 1 from 2 to 1
+move 3 from 1 to 3
+move 2 from 2 to 1
+move 1 from 1 to 2
+"
+
+    Assert.Equal("CMZ", input)

@@ -12,14 +12,14 @@ type Crate =
 
     static member Equal(c1: Crate, c2: Crate) =
         match (c1, c2) with
-        | (Crate ch1, Crate ch2) when ch1 = ch2 -> true
-        | (Empty, Empty) -> true
+        | Crate ch1, Crate ch2 when ch1 = ch2 -> true
+        | Empty, Empty -> true
         | _ -> false
 
     static member (!=)(c1: Crate, c2: Crate) =
         match (c1, c2) with
-        | (Crate ch1, Crate ch2) when ch1 = ch2 -> false
-        | (Empty, Empty) -> false
+        | Crate ch1, Crate ch2 when ch1 = ch2 -> false
+        | Empty, Empty -> false
         | _ -> true
 
 type Move =
@@ -47,7 +47,7 @@ let internal parseCargo (lines: seq<string>) =
 
     let getColumn (i: int) : Crate list =
         ([], [ 0 .. tempCargo.Length - 1 ])
-        ||> Seq.fold (fun acc row -> acc @ [ tempCargo[row][i] ])
+        ||> Seq.fold (fun acc row -> acc @ [ if i >= tempCargo[row].Length then Empty else tempCargo[row][i] ])
         |> List.filter (fun c -> c != Empty)
 
     ([], [ 0 .. tempCargo.Length - 1 ])
@@ -69,13 +69,38 @@ let internal convertCargoToMap (cargo: Crate list list) : Map<int, Crate list> =
     ||> Seq.fold (fun acc pile -> acc.Add(pile, cargo |> Seq.skip (pile - 1) |> Seq.head))
 
 let internal popFromPile (cargo: Map<int, Crate list>) (fromPile: int) : Crate * Map<int, Crate list> =
-    let crate = cargo.[fromPile].Head
-    let rest = cargo.[fromPile].Tail
+    let crate = cargo[fromPile].Head
+    let rest = cargo[fromPile].Tail
     let cargoWithoutCrate = cargo.Add(fromPile, rest)
     (crate, cargoWithoutCrate)
 
+let pushToPile (cargo: Map<int, Crate list>) (toPile: int) (crate: Crate) : Map<int, Crate list> =
+    let pile = [ crate ] @ cargo[toPile]
+    cargo.Add(toPile, pile)
 
+let answer1 (input: string) : string =
+    let input = input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+    let cargo = parseCargo input |> convertCargoToMap
+    let movements = parseMovements input
 
-let answer1 (input: string) : string = "test"
+    let res: Map<int, Crate list> =
+        (cargo, movements)
+        ||> Seq.fold (fun acc move ->
+                        (acc, [ 1 .. move.countCrates ])
+                        ||> Seq.fold (fun res _ ->
+                            let crate, newCargo = popFromPile res move.fromPile
+                            pushToPile newCargo move.toPile crate))
+
+    ([], [ 1 .. res.Count ])
+    ||> Seq.fold (fun acc pile ->
+        printfn $"Test{acc}"
+        (res[pile] |> List.head) :: acc)
+    |> Seq.map (fun (crate : Crate) ->
+        match crate with
+        | Crate c -> c
+        | _ -> ' ')
+    |> Seq.rev
+    |> String.Concat
+
 
 let answer2 (input: string) : string = "test"
