@@ -6,8 +6,13 @@ open Xunit
 [<Fact>]
 let ``Parse line of crates`` () =
     let input = parseCrates "[Z] [M] [P]" |> Array.toSeq
-    let output = [|Crate 'Z'; Crate 'M'; Crate 'P'|] |> Array.toSeq
-    Assert.Equal (output |> Seq.length, input |> Seq.length)
-    output
-    |> Seq.zip input
-    |> Seq.iter Assert.Equal
+    let output = [| Crate 'Z'; Crate 'M'; Crate 'P' |] |> Array.toSeq
+    Assert.Equal(output |> Seq.length, input |> Seq.length)
+    output |> Seq.zip input |> Seq.iter Assert.Equal
+
+[<Fact>]
+let ``Parse line of crates with holes`` () =
+    let input = parseCrates "[N] [C]    " |> Array.toSeq
+    let output = [| Crate 'Z'; Crate 'C'; Empty |] |> Array.toSeq
+    Assert.Equal(output |> Seq.length, input |> Seq.length)
+    output |> Seq.zip input |> Seq.iter Assert.Equal
