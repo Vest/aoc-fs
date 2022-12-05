@@ -110,26 +110,21 @@ let ``Push cargo to empty Map`` () =
 [<Fact>]
 let ``First answer, no changes`` () =
     let input =
-        answer1
-            "    [D]
-[N] [C]
-[Z] [M] [P]
- 1   2   3
-"
+        answer1 ("    [D]    \n" + "[N] [C]    \n" + "[Z] [M] [P]\n" + " 1   2   3 \n" + "\n")
 
     Assert.Equal("NDP", input)
 
 [<Fact>]
 let ``First answer, one move`` () =
     let input =
-        answer1
-            "    [D]
-[N] [C]
-[Z] [M] [P]
- 1   2   3
-
-move 1 from 2 to 1
-"
+        answer1 (
+            "    [D]    \n"
+            + "[N] [C]    \n"
+            + "[Z] [M] [P]\n"
+            + " 1   2   3 \n"
+            + "\n"
+            + "move 1 from 2 to 1\n"
+        )
 
     Assert.Equal("DCP", input)
 
@@ -137,16 +132,33 @@ move 1 from 2 to 1
 [<Fact>]
 let ``First answer`` () =
     let input =
-        answer1
-            "    [D]
-[N] [C]
-[Z] [M] [P]
- 1   2   3
-
-move 1 from 2 to 1
-move 3 from 1 to 3
-move 2 from 2 to 1
-move 1 from 1 to 2
-"
+        answer1 (
+            "    [D]    \n"
+            + "[N] [C]    \n"
+            + "[Z] [M] [P]\n"
+            + " 1   2   3 \n"
+            + "\n"
+            + "move 1 from 2 to 1\n"
+            + "move 3 from 1 to 3\n"
+            + "move 2 from 2 to 1\n"
+            + "move 1 from 1 to 2\n"
+        )
 
     Assert.Equal("CMZ", input)
+
+[<Fact>]
+let ``Second answer`` () =
+    let input =
+        answer2 (
+            "    [D]    \n"
+            + "[N] [C]    \n"
+            + "[Z] [M] [P]\n"
+            + " 1   2   3 \n"
+            + "\n"
+            + "move 1 from 2 to 1\n"
+            + "move 3 from 1 to 3\n"
+            + "move 2 from 2 to 1\n"
+            + "move 1 from 1 to 2\n"
+        )
+
+    Assert.Equal("MCD", input)

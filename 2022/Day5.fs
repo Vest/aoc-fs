@@ -106,4 +106,25 @@ let answer1 (input: string) : string =
     |> String.Concat
 
 
-let answer2 (input: string) : string = "test"
+let answer2 (input: string) : string =
+    let input = input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+    let cargo = parseCargo input |> convertCargoToMap
+    let movements = parseMovements input
+
+    let res: Map<int, Crate list> =
+        (cargo, movements)
+        ||> Seq.fold (fun acc move ->
+            let take = acc[move.fromPile] |> List.take move.countCrates
+            let left = acc[move.fromPile] |> List.skip move.countCrates
+            let newPile = take @ acc[move.toPile]
+            let newCargo = acc.Add(move.fromPile, left)
+            newCargo.Add(move.toPile, newPile))
+
+    ([], [ 1 .. res.Count ])
+    ||> Seq.fold (fun acc pile -> res[pile].Head :: acc)
+    |> Seq.map (fun (crate: Crate) ->
+        match crate with
+        | Crate c -> c
+        | _ -> ' ')
+    |> Seq.rev
+    |> String.Concat
