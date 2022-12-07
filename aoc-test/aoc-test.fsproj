@@ -35,9 +35,4 @@
     <ItemGroup>
         <ProjectReference Include="..\aoc-fs.fsproj" />
     </ItemGroup>
-    <ItemGroup>
-        <Reference Include="System.Private.CoreLib">
-            <HintPath>..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.NETCore.App\7.0.0\System.Private.CoreLib.dll</HintPath>
-        </Reference>
-    </ItemGroup>
 </Project>
