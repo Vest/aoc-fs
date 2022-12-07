@@ -1,6 +1,7 @@
 module aoc.year2022.Day7
 
 open System
+open System.Drawing
 open System.Runtime.CompilerServices
 
 [<assembly: InternalsVisibleTo("aoc-test")>]
@@ -39,19 +40,17 @@ let internal parseListLine (line: string) : Node =
     commands
         |> *)
 
-let internal buildFolder (commands : string list) : Node list =
-    commands
-    |> List.map parseListLine
+let internal buildFolder (commands: string list) : Node list = commands |> List.map parseListLine
 
-let rec internal getCurrentFolder (startingPosition : int) (commands : string list) : (int * Node list) =
-    let mutable children : Node list = List.empty
+let rec internal getCurrentFolder (startingPosition: int) (commands: string list) : (int * Node list) =
+    let mutable children: Node list = List.empty
     let mutable toBreak = false
     let mutable i = startingPosition
 
     while not toBreak && i < commands.Length do
         let command = commands[i]
 
-        if (command= "$ ls" || command = "$ cd /") then
+        if (command = "$ ls") then
             // nothing
             ()
         elif (command = "$ cd ..") then
@@ -59,27 +58,42 @@ let rec internal getCurrentFolder (startingPosition : int) (commands : string li
             i <- i - 1
         elif (command.StartsWith("$ cd") = true) then
             let folderName = command.Substring 5
-            let child = children
-                        |> List.find (fun c -> c.Name = folderName)
+
+            let child =
+                match folderName with
+                | "/" ->
+                    let tmp: Node =
+                        { Name = "/"
+                          Kind = Folder
+                          Children = [] }
+
+                    children <- tmp :: children
+                    tmp
+                | _ -> children |> List.find (fun c -> c.Name = folderName)
+
             let newI, nestedChildren = getCurrentFolder (i + 1) commands
             child.Children <- nestedChildren
             i <- newI
         else
             let node = parseListLine command
-            children <- List.append children [node]
+            children <- List.append children [ node ]
             ()
+
         i <- i + 1
+
     i, children
 
-let answer1 (input : string) : int =
+let answer1 (input: string) : int =
     let _, tree =
         input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
         |> Array.toList
         |> getCurrentFolder 0
-    let rec loop (input : Node) acc =
+
+    let rec loop (input: Node) acc =
         match input with
         | node when node.Kind = Folder -> node :: List.fold (fun acc child -> loop child acc) acc node.Children
         | node -> node :: acc
+
     let res =
         tree
         |> List.fold (fun acc t -> loop t acc) []
@@ -91,4 +105,33 @@ let answer1 (input : string) : int =
         |> List.sum
 
     res
-let answer2 input = 0
+
+let answer2 (input: string) : int =
+    let _, tree =
+        input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+        |> Array.toList
+        |> getCurrentFolder 0
+
+    let rec loop (input: Node) acc =
+        match input with
+        | node when node.Kind = Folder -> node :: List.fold (fun acc child -> loop child acc) acc node.Children
+        | node -> node :: acc
+
+    let fullTree =
+        tree
+        |> List.fold (fun acc t -> loop t acc) []
+        |> List.filter (fun node ->
+            match node with
+            | node when node.Kind = Folder -> true
+            | _ -> false)
+        |> List.sortBy (fun node -> node.Size)
+
+    let root = fullTree |> List.last
+    let freeSpace = 70000000 - root.Size
+
+    let res =
+        fullTree
+        |> List.pairwise
+        |> List.find (fun (folder1, folder2) -> folder1.Size + freeSpace <= 30000000 && folder2.Size + freeSpace >= 30000000)
+    let answer = snd res
+    answer.Size
