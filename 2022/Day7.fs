@@ -55,7 +55,6 @@ let rec internal getCurrentFolder (startingPosition: int) (commands: string list
                         { Name = "/"
                           Kind = Folder
                           Children = [] }
-
                     children <- tmpNode :: children
                     tmpNode
                 | _ -> children |> List.find (fun c -> c.Name = folderName)
