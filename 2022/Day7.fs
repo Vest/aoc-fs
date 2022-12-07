@@ -10,7 +10,6 @@ type Kind =
     | Folder
     | File of size: int
 
-
 type Node =
     { Name: string
       Kind: Kind
