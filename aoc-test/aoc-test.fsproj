@@ -15,6 +15,7 @@
         <Compile Include="2022\Day4Tests.fs"/>
         <Compile Include="2022\Day5Tests.fs"/>
         <Compile Include="2022\Day6Tests.fs"/>
+        <Compile Include="2022\Day7Tests.fs"/>
         <Compile Include="InputCachingTests.fs"/>
         <Compile Include="DownloaderTests.fs"/>
         <Compile Include="Program.fs"/>
@@ -33,10 +34,5 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\aoc-fs.fsproj"/>
-    </ItemGroup>
-    <ItemGroup>
-        <Reference Include="System.Private.CoreLib">
-            <HintPath>..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.NETCore.App\7.0.0\System.Private.CoreLib.dll</HintPath>
-        </Reference>
     </ItemGroup>
 </Project>
