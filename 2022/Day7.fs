@@ -132,6 +132,8 @@ let answer2 (input: string) : int =
     let res =
         fullTree
         |> List.pairwise
-        |> List.find (fun (folder1, folder2) -> folder1.Size + freeSpace <= 30000000 && folder2.Size + freeSpace >= 30000000)
+        |> List.find (fun (folder1, folder2) ->
+            folder1.Size + freeSpace <= 30000000 && folder2.Size + freeSpace >= 30000000)
+
     let answer = snd res
     answer.Size

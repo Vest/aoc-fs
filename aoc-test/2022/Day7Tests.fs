@@ -52,7 +52,8 @@ let ``Parse folder`` () =
 
 [<Fact>]
 let ``Build current folder`` () =
-    let input : string = @"$ cd /
+    let input: string =
+        @"$ cd /
 $ ls
 dir a
 14848514 b.txt
@@ -75,18 +76,18 @@ $ ls
 8033020 d.log
 5626152 d.ext
 7214296 k"
+
     let inputList =
-        input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
-        |> Array.toList
-    let result = inputList
-                 |> getCurrentFolder 0
-                 |> snd
+        input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None) |> Array.toList
+
+    let result = inputList |> getCurrentFolder 0 |> snd
     printf "%A" result
     ()
 
 [<Fact>]
 let ``First Answer`` () =
-    let input : string = @"$ cd /
+    let input: string =
+        @"$ cd /
 $ ls
 dir a
 14848514 b.txt
@@ -109,11 +110,13 @@ $ ls
 8033020 d.log
 5626152 d.ext
 7214296 k"
+
     Assert.Equal(95437, answer1 input)
 
 [<Fact>]
 let ``Second Answer`` () =
-    let input : string = @"$ cd /
+    let input: string =
+        @"$ cd /
 $ ls
 dir a
 14848514 b.txt
@@ -136,4 +139,5 @@ $ ls
 8033020 d.log
 5626152 d.ext
 7214296 k"
+
     Assert.Equal(24933642, answer2 input)
