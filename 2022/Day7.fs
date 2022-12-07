@@ -1,7 +1,6 @@
 module aoc.year2022.Day7
 
 open System
-open System.Drawing
 open System.Runtime.CompilerServices
 
 [<assembly: InternalsVisibleTo("aoc-test")>]
@@ -10,7 +9,6 @@ do ()
 type Kind =
     | Folder
     | File of size: int
-
 
 type Node =
     { Name: string
@@ -21,7 +19,6 @@ type Node =
         match this.Kind with
         | Folder -> this.Children |> List.map (fun child -> child.Size) |> List.sum
         | File size -> size
-
 
 let internal parseListLine (line: string) : Node =
     let (name: string, kind: Kind) =
@@ -35,13 +32,6 @@ let internal parseListLine (line: string) : Node =
       Kind = kind
       Children = [] }
 
-(*let internal buildFileSystem (commands : string seq) : int * Node list =
-    let mut nodes : Node list = []
-    commands
-        |> *)
-
-let internal buildFolder (commands: string list) : Node list = commands |> List.map parseListLine
-
 let rec internal getCurrentFolder (startingPosition: int) (commands: string list) : (int * Node list) =
     let mutable children: Node list = List.empty
     let mutable toBreak = false
@@ -51,7 +41,6 @@ let rec internal getCurrentFolder (startingPosition: int) (commands: string list
         let command = commands[i]
 
         if (command = "$ ls") then
-            // nothing
             ()
         elif (command = "$ cd ..") then
             toBreak <- true
@@ -62,13 +51,12 @@ let rec internal getCurrentFolder (startingPosition: int) (commands: string list
             let child =
                 match folderName with
                 | "/" ->
-                    let tmp: Node =
+                    let tmpNode: Node =
                         { Name = "/"
                           Kind = Folder
                           Children = [] }
-
-                    children <- tmp :: children
-                    tmp
+                    children <- tmpNode :: children
+                    tmpNode
                 | _ -> children |> List.find (fun c -> c.Name = folderName)
 
             let newI, nestedChildren = getCurrentFolder (i + 1) commands
@@ -126,14 +114,9 @@ let answer2 (input: string) : int =
             | _ -> false)
         |> List.sortBy (fun node -> node.Size)
 
-    let root = fullTree |> List.last
-    let freeSpace = 70000000 - root.Size
+    let rootNode = fullTree |> List.last
+    let freeSpace = 70000000 - rootNode.Size
 
-    let res =
-        fullTree
-        |> List.pairwise
-        |> List.find (fun (folder1, folder2) ->
-            folder1.Size + freeSpace <= 30000000 && folder2.Size + freeSpace >= 30000000)
+    let res = fullTree |> List.find (fun folder -> folder.Size + freeSpace >= 30000000)
 
-    let answer = snd res
-    answer.Size
+    res.Size

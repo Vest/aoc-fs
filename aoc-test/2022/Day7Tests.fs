@@ -31,26 +31,6 @@ let ``Parse Line: file`` () =
     Assert.Equal(14848514, parsedLine.Size)
 
 [<Fact>]
-let ``Parse folder`` () =
-    let files: Node list = buildFolder [ "dir e"; "29116 f"; "2557 g"; "62596 h.lst" ]
-
-    Assert.Equal<Node>(
-        [ { Name = "e"
-            Kind = Folder
-            Children = [] }
-          { Name = "f"
-            Kind = File 29116
-            Children = [] }
-          { Name = "g"
-            Kind = File 2557
-            Children = [] }
-          { Name = "h.lst"
-            Kind = File 62596
-            Children = [] } ],
-        files
-    )
-
-[<Fact>]
 let ``Build current folder`` () =
     let input: string =
         @"$ cd /
