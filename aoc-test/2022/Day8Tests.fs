@@ -54,5 +54,35 @@ let ``Is visible - sample field`` () =
     Assert.False(forest.isVisible 3 3)
 
 [<Fact>]
-let ``First Answer`` () =
-    Assert.Equal(21, answer1 input)
+let ``First Answer`` () = Assert.Equal(21, answer1 input)
+
+[<Fact>]
+let ``Count trees - sample field`` () =
+    let forest: Field = createField input
+
+    Assert.Equal(
+        { up = 1
+          down = 2
+          left = 1
+          right = 2 },
+        forest.countTrees 1 2
+    )
+
+    Assert.Equal(
+        { up = 2
+          down = 1
+          left = 2
+          right = 2 },
+        forest.countTrees 3 2
+    )
+
+    Assert.Equal(
+        { up = 1
+          down = 1
+          left = 1
+          right = 1 },
+        forest.countTrees 3 1
+    )
+
+[<Fact>]
+let ``Second Answer`` () = Assert.Equal(8, answer2 input)
