@@ -90,4 +90,42 @@ let answer1 (input: string) : int =
     |> Seq.countBy (fun tail -> (tail.row, tail.col))
     |> Seq.length
 
-let answer2 (input: string) : int = 0
+let answer2 (input: string) : int =
+    let rope: Rope =
+        { head = { row = 0; col = 0 }
+          tail = { row = 0; col = 0 } }
+
+    let len =
+        input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+        |> Array.toSeq
+        |> Seq.map parseLine
+        |> Seq.mapFold (fun rope movement ->
+                // helper function
+                let updateRope (move: Coord -> Coord) (rope: Rope list) : Rope list=
+                    let newHead =  { head = move rope.Head.head; tail = rope.Head.tail }
+                    let currentTail = rope.Tail
+                    (newHead :: currentTail)
+                    |> List.fold (fun acc knot ->
+                        if acc.IsEmpty then
+                            let newKnot = updateTail knot
+                            acc @ [newKnot]
+                        else
+                            let lastKnot = acc |> List.last
+                            let newKnot = updateTail {head = lastKnot.tail; tail = knot.head}
+                            acc @ [newKnot]
+                    ) []
+
+                let moves =
+                    match movement with
+                    | Right steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveRight rope) rope
+                    | Left steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveLeft rope) rope
+                    | Up steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveUp rope) rope
+                    | Down steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveDown rope) rope
+
+                moves, moves |> Seq.last)
+            [for i in 1 .. 9 -> rope]
+        |> fst
+        |> Seq.collect (fun res -> res |> List.map (fun r -> r |> List.last))
+        |> Seq.countBy (fun rope -> (rope.head.row, rope.head.col))
+        |> Seq.length
+    0

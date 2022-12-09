@@ -116,3 +116,6 @@ let ``Parse line`` () =
 
 [<Fact>]
 let ``First Answer`` () = Assert.Equal(13, answer1 input)
+
+[<Fact>]
+let ``Second Answer`` () = Assert.Equal(1, answer2 input)
