@@ -64,25 +64,30 @@ let answer1 (input: string) : int =
         { head = { row = 0; col = 0 }
           tail = { row = 0; col = 0 } }
 
-    let len =
-        input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
-        |> Array.toSeq
-        |> Seq.map parseLine
-        |> Seq.fold
-            (fun rope movement ->
-                // helper function
-                let updateRope (move: Coord -> Coord) (rope: Rope) : Rope =
-                    let newHead = move rope.head
-                    let newRope = { head = newHead; tail = rope.tail }
-                    updateTail newRope
+    input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+    |> Array.toSeq
+    |> Seq.map parseLine
+    |> Seq.mapFold
+        (fun rope movement ->
+            // helper function
+            let updateRope (move: Coord -> Coord) (rope: Rope) : Rope =
+                let newHead = move rope.head
+                let newRope = { head = newHead; tail = rope.tail }
+                updateTail newRope
 
+            let moves =
                 match movement with
-                | Right steps -> [ 1..steps ] |> List.fold (fun rope _ -> updateRope moveRight rope) rope
-                | Left steps -> [ 1..steps ] |> List.fold (fun rope _ -> updateRope moveLeft rope) rope
-                | Up steps -> [ 1..steps ] |> List.fold (fun rope _ -> updateRope moveUp rope) rope
-                | Down steps -> [ 1..steps ] |> List.fold (fun rope _ -> updateRope moveDown rope) rope)
-            rope
+                | Right steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveRight rope) rope
+                | Left steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveLeft rope) rope
+                | Up steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveUp rope) rope
+                | Down steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveDown rope) rope
 
-    0
+            moves, moves |> Seq.last)
+        rope
+    |> fst
+    |> Seq.collect (fun res -> res |> List.toSeq)
+    |> Seq.map (fun moves -> moves.tail)
+    |> Seq.countBy (fun tail -> (tail.row, tail.col))
+    |> Seq.length
 
 let answer2 (input: string) : int = 0
