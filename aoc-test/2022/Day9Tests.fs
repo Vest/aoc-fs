@@ -16,98 +16,34 @@ R 2"
 
 [<Fact>]
 let ``Test movements: Start-Stop`` () =
-    Assert.Equal(
-        { head = { row = 0; col = 0 }
-          tail = { row = 0; col = 0 } },
-        updateTail
-            { head = { row = 0; col = 0 }
-              tail = { row = 0; col = 0 } }
-    )
-
-    Assert.Equal(
-        { head = { row = 2; col = 2 }
-          tail = { row = 2; col = 2 } },
-        updateTail
-            { head = { row = 2; col = 2 }
-              tail = { row = 2; col = 2 } }
-    )
+    Assert.Equal({ row = 0; col = 0 }, updateKnot { row = 0; col = 0 } { row = 0; col = 0 })
+    Assert.Equal({ row = 2; col = 2 }, updateKnot { row = 2; col = 2 } { row = 2; col = 2 })
 
 [<Fact>]
 let ``Test movements: Move right`` () =
-    Assert.Equal(
-        { head = { row = 0; col = 2 }
-          tail = { row = 0; col = 1 } },
-        updateTail
-            { head = { row = 0; col = 2 }
-              tail = { row = 0; col = 0 } }
-    )
+    Assert.Equal({ row = 0; col = 1 }, updateKnot { row = 0; col = 2 } { row = 0; col = 0 })
 
 [<Fact>]
 let ``Test movements: Move left`` () =
-    Assert.Equal(
-        { head = { row = 0; col = 0 }
-          tail = { row = 0; col = 1 } },
-        updateTail
-            { head = { row = 0; col = 0 }
-              tail = { row = 0; col = 2 } }
-    )
-
+    Assert.Equal({ row = 0; col = 1 }, updateKnot { row = 0; col = 0 } { row = 0; col = 2 })
 
 [<Fact>]
 let ``Test movements: Move up`` () =
-    Assert.Equal(
-        { head = { row = 2; col = 0 }
-          tail = { row = 1; col = 0 } },
-        updateTail
-            { head = { row = 2; col = 0 }
-              tail = { row = 0; col = 0 } }
-    )
+    Assert.Equal({ row = 1; col = 0 }, updateKnot { row = 2; col = 0 } { row = 0; col = 0 })
 
 [<Fact>]
 let ``Test movements: Move down`` () =
-    Assert.Equal(
-        { head = { row = 2; col = 0 }
-          tail = { row = 1; col = 0 } },
-        updateTail
-            { head = { row = 2; col = 0 }
-              tail = { row = 0; col = 0 } }
-    )
+    Assert.Equal({ row = 1; col = 0 }, updateKnot { row = 0; col = 0 } { row = 2; col = 0 })
 
 [<Fact>]
 let ``Test movements: Don't move`` () =
-    Assert.Equal(
-        { head = { row = 2; col = 0 }
-          tail = { row = 1; col = 0 } },
-        updateTail
-            { head = { row = 2; col = 0 }
-              tail = { row = 1; col = 0 } }
-    )
-
-    Assert.Equal(
-        { head = { row = 2; col = 2 }
-          tail = { row = 1; col = 1 } },
-        updateTail
-            { head = { row = 2; col = 2 }
-              tail = { row = 1; col = 1 } }
-    )
+    Assert.Equal({ row = 1; col = 0 }, updateKnot { row = 2; col = 0 } { row = 1; col = 0 })
+    Assert.Equal({ row = 1; col = 1 }, updateKnot { row = 2; col = 2 } { row = 1; col = 1 })
 
 [<Fact>]
 let ``Test movements: Move diagonally`` () =
-    Assert.Equal(
-        { head = { row = 1; col = 2 }
-          tail = { row = 2; col = 2 } },
-        updateTail
-            { head = { row = 1; col = 2 }
-              tail = { row = 3; col = 1 } }
-    )
-
-    Assert.Equal(
-        { head = { row = 2; col = 3 }
-          tail = { row = 2; col = 2 } },
-        updateTail
-            { head = { row = 2; col = 3 }
-              tail = { row = 3; col = 1 } }
-    )
+    Assert.Equal({ row = 2; col = 2 }, updateKnot { row = 1; col = 2 } { row = 3; col = 1 })
+    Assert.Equal({ row = 2; col = 2 }, updateKnot { row = 2; col = 3 } { row = 3; col = 1 })
 
 [<Fact>]
 let ``Parse line`` () =
@@ -118,4 +54,18 @@ let ``Parse line`` () =
 let ``First Answer`` () = Assert.Equal(13, answer1 input)
 
 [<Fact>]
-let ``Second Answer`` () = Assert.Equal(1, answer2 input)
+let ``Second Answer: Simple`` () = Assert.Equal(1, answer2 input)
+
+[<Fact>]
+let ``Second Answer: Advanced`` () =
+    let input =
+        @"R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20"
+
+    Assert.Equal(36, answer2 input)

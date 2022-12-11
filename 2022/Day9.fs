@@ -8,8 +8,6 @@ do ()
 
 type Coord = { row: int; col: int }
 
-type Rope = { head: Coord; tail: Coord }
-
 let internal moveRight coord =
     { row = coord.row; col = coord.col + 1 }
 
@@ -22,26 +20,19 @@ let internal moveUp coord =
 let internal moveDown coord =
     { row = coord.row + 1; col = coord.col }
 
-let internal updateTail rope =
-    match rope with
-    | { head = head; tail = tail } when head = tail -> rope
-    | { head = head; tail = tail } when abs (head.row - tail.row) <= 1 && abs (head.col - tail.col) <= 1 -> rope
-    | { head = head; tail = tail } when head.row = tail.row || head.col = tail.col ->
-        { head = head
-          tail =
-            { row = (head.row + tail.row) / 2
-              col = (head.col + tail.col) / 2 } }
-    | { head = head; tail = tail } when abs (head.col - tail.col) = 1 ->
-        { head = head
-          tail =
-            { row = (head.row + tail.row) / 2
-              col = head.col } }
-    | { head = head; tail = tail } when abs (head.row - tail.row) = 1 ->
-        { head = head
-          tail =
-            { row = head.row
-              col = (head.col + tail.col) / 2 } }
-    | _ -> failwith "couldn't happen?!"
+let internal updateKnot head knot =
+    match (head, knot) with
+    | (head, knot) when head = knot -> knot
+    | (head, knot) when abs (head.row - knot.row) <= 1 && abs (head.col - knot.col) <= 1 -> knot
+    | (head, knot) when abs (head.col - knot.col) = 1 ->
+        { row = (head.row + knot.row) / 2
+          col = head.col }
+    | (head, knot) when abs (head.row - knot.row) = 1 ->
+        { row = head.row
+          col = (head.col + knot.col) / 2 }
+    | (head, knot) ->
+        { row = (head.row + knot.row) / 2
+          col = (head.col + knot.col) / 2 }
 
 type Movement =
     | Right of int
@@ -59,22 +50,24 @@ let internal parseLine (input: string) : Movement =
     | i when i[0] = 'D' -> Down steps
     | _ -> failwith "Wrong input, unexpected string"
 
-let answer1 (input: string) : int =
-    let rope: Rope =
-        { head = { row = 0; col = 0 }
-          tail = { row = 0; col = 0 } }
+let updateRope (move: Coord -> Coord) (rope: Coord list) : Coord list =
+    let newHead = move rope.Head
 
+    rope
+    |> List.skip 1
+    |> List.fold
+        (fun acc knot ->
+            let head = acc |> List.last
+            let newKnot = updateKnot head knot
+            acc @ [ newKnot ])
+        [ newHead ]
+
+let findAnswer (input: string) (rope: Coord list) : int =
     input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
     |> Array.toSeq
     |> Seq.map parseLine
     |> Seq.mapFold
         (fun rope movement ->
-            // helper function
-            let updateRope (move: Coord -> Coord) (rope: Rope) : Rope =
-                let newHead = move rope.head
-                let newRope = { head = newHead; tail = rope.tail }
-                updateTail newRope
-
             let moves =
                 match movement with
                 | Right steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveRight rope) rope
@@ -82,50 +75,19 @@ let answer1 (input: string) : int =
                 | Up steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveUp rope) rope
                 | Down steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveDown rope) rope
 
-            moves, moves |> Seq.last)
+            let newRope = moves |> List.last
+            let lastMoves = moves |> List.map (fun move -> move |> List.last)
+            lastMoves, newRope)
         rope
     |> fst
-    |> Seq.collect (fun res -> res |> List.toSeq)
-    |> Seq.map (fun moves -> moves.tail)
-    |> Seq.countBy (fun tail -> (tail.row, tail.col))
+    |> Seq.collect id
+    |> Seq.countBy (fun knot -> (knot.row, knot.col))
     |> Seq.length
 
+let answer1 (input: string) : int =
+    let rope: Coord list = [ { row = 0; col = 0 }; { row = 0; col = 0 } ]
+    findAnswer input rope
+
 let answer2 (input: string) : int =
-    let rope: Rope =
-        { head = { row = 0; col = 0 }
-          tail = { row = 0; col = 0 } }
-
-    let len =
-        input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
-        |> Array.toSeq
-        |> Seq.map parseLine
-        |> Seq.mapFold (fun rope movement ->
-                // helper function
-                let updateRope (move: Coord -> Coord) (rope: Rope list) : Rope list=
-                    let newHead =  { head = move rope.Head.head; tail = rope.Head.tail }
-                    let currentTail = rope.Tail
-                    (newHead :: currentTail)
-                    |> List.fold (fun acc knot ->
-                        if acc.IsEmpty then
-                            let newKnot = updateTail knot
-                            acc @ [newKnot]
-                        else
-                            let lastKnot = acc |> List.last
-                            let newKnot = updateTail {head = lastKnot.tail; tail = knot.head}
-                            acc @ [newKnot]
-                    ) []
-
-                let moves =
-                    match movement with
-                    | Right steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveRight rope) rope
-                    | Left steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveLeft rope) rope
-                    | Up steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveUp rope) rope
-                    | Down steps -> [ 1..steps ] |> List.scan (fun rope _ -> updateRope moveDown rope) rope
-
-                moves, moves |> Seq.last)
-            [for i in 1 .. 9 -> rope]
-        |> fst
-        |> Seq.collect (fun res -> res |> List.map (fun r -> r |> List.last))
-        |> Seq.countBy (fun rope -> (rope.head.row, rope.head.col))
-        |> Seq.length
-    0
+    let rope: Coord list = Seq.init 10 (fun _ -> { row = 0; col = 0 }) |> Seq.toList
+    findAnswer input rope
