@@ -158,7 +158,6 @@ let ``Parse line`` () =
     Assert.Equal(ADDX 5, parseLine "addx 5")
     Assert.Equal(ADDX -50, parseLine "addx -50")
 
-
 [<Fact>]
 let ``CPU: noop`` () =
     let cpu = { x = 0 }
@@ -180,7 +179,6 @@ let ``CPU: addx`` () =
 
     Assert.Equal({ x = 5 }, newCpu)
     Assert.Equal(2, currentCycle)
-
 
 [<Fact>]
 let ``First Answer`` () =
