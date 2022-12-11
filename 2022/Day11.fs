@@ -3,6 +3,7 @@ module aoc.year2022.Day11
 open System
 open System.Runtime.CompilerServices
 open System.Text.RegularExpressions
+open Microsoft.FSharp.Core.Operators.Checked
 
 [<assembly: InternalsVisibleTo("aoc-test")>]
 do ()
@@ -94,11 +95,27 @@ let answer1 (input: string) : int =
     seq { 1..20 }
     |> Seq.scan
         (fun monkeys _ ->
-            round (fun index monkey -> itemsCount[index] <- itemsCount[index] + monkey.items.Length) monkeys)
+            round (fun index monkey ->
+                itemsCount[index] <- itemsCount[index] + monkey.items.Length
+            ) monkeys)
         monkeys
     |> Seq.length
     |> ignore
 
     itemsCount |> Array.sortDescending |> Array.take 2 |> Array.fold (*) 1
 
-let answer2 input = 0
+let answer2 input =
+    let monkeys = parseMonkeys input
+    let mutable itemsCount = Array.init (monkeys.Count) (fun _ -> 0)
+
+    seq { 1..20 }
+    |> Seq.scan
+        (fun monkeys r ->
+            round (fun index monkey ->
+                let tempr = r
+                itemsCount[index] <- itemsCount[index] + monkey.items.Length) monkeys)
+        monkeys
+    |> Seq.length
+    |> ignore
+
+    itemsCount |> Array.sortDescending |> Array.take 2 |> Array.fold (*) 1

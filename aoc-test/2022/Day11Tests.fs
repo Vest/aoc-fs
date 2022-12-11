@@ -65,4 +65,7 @@ let ``First round`` () =
     Assert.Equal<int>(List.empty, newMonkeys.[3].items)
 
 [<Fact>]
-let ``First answer`` () = Assert.Equal(10605, answer1 input)
+let ``First answer`` () = Assert.Equal(101*105, answer1 input)
+
+[<Fact>]
+let ``Second answer`` () = Assert.Equal(99 * 103, answer2 input)
