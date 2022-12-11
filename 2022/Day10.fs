@@ -29,9 +29,9 @@ let internal executeInstruction (tick: int -> CPU -> unit) (acc: int) (cpu: CPU)
         tick acc cpu
         acc, cpu
     | ADDX x ->
+        let newCpu = { x = cpu.x + x }
         tick acc cpu
         tick (acc + 1) cpu
-        let newCpu = { x = cpu.x + x }
         (acc + 1), newCpu
 
 let answer1 (input: string) : int =
@@ -55,4 +55,34 @@ let answer1 (input: string) : int =
 
     answer |> List.sum
 
-let answer2 (input: string) : int = 0
+let answer2 (input: string) : string =
+    let mutable finalAnswer = ""
+    let mutable answer = ""
+    let mutable spritePos = 1
+
+    input.Split([| "\r\n"; "\r"; "\n" |], StringSplitOptions.None)
+    |> Array.toSeq
+    |> Seq.map parseLine
+    |> Seq.fold
+        (fun (cycle, cpu) instr ->
+            executeInstruction
+                (fun cycle cpu ->
+                    if cycle <> 1 && (cycle - 1) % 40 = 0 then
+                        finalAnswer <- String.Concat(finalAnswer, $"{answer}{Environment.NewLine}")
+                        answer <- ""
+
+                    if abs (spritePos % 40 - cpu.x) <= 1 then
+                        answer <- answer + "#"
+                    else
+                        answer <- answer + "."
+
+                    spritePos <- cycle)
+                cycle
+                cpu
+                instr)
+        (0, { x = 1 })
+    |> ignore
+
+    finalAnswer <- String.Concat(finalAnswer, $"{answer}")
+
+    finalAnswer

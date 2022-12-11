@@ -1,4 +1,5 @@
-﻿open aoc.year2022
+﻿open System
+open aoc.year2022
 open aoc.Input
 
 let displayAnswer (answer: string) (isError: bool) : unit =
@@ -20,7 +21,8 @@ let display year day =
         | Some input, 7 -> (false, $"Day {day} / {year}: {Day7.answer1 input} and {Day7.answer2 input}")
         | Some input, 8 -> (false, $"Day {day} / {year}: {Day8.answer1 input} and {Day8.answer2 input}")
         | Some input, 9 -> (false, $"Day {day} / {year}: {Day9.answer1 input} and {Day9.answer2 input}")
-        | Some input, 10 -> (false, $"Day {day} / {year}: {Day10.answer1 input} and {Day10.answer2 input}")
+        | Some input, 10 ->
+            (false, $"Day {day} / {year}: {Day10.answer1 input} and:{Environment.NewLine}{Day10.answer2 input}")
         | _ -> (true, $"Day {day} / {year}: Sorry, but there is no input for the current day")
 
     displayAnswer (snd answer) (fst answer)
