@@ -20,6 +20,7 @@
         <Compile Include="2022\Day9Tests.fs"/>
         <Compile Include="2022\Day10Tests.fs"/>
         <Compile Include="2022\Day11Tests.fs"/>
+        <Compile Include="2022\Day12Tests.fs"/>
         <Compile Include="InputCachingTests.fs"/>
         <Compile Include="DownloaderTests.fs"/>
         <Compile Include="Program.fs"/>
