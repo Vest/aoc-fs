@@ -50,22 +50,24 @@ let ``Parse monkey`` () =
     If false: throw to monkey 3"
 
     Assert.Equal(0, fst output)
-    Assert.Equal<int>([ 79; 98 ], (snd output).items)
-    Assert.Equal(23, (snd output).divisible)
-    Assert.Equal(5 * 19, (snd output).operation 5)
+    Assert.Equal<Int64>([ 79L; 98L ], (snd output).items)
+    Assert.Equal(23L, (snd output).divisible)
+    Assert.Equal(5L * 19L, (snd output).operation 5L)
     Assert.Equal<Map<bool, int>>(Map [ (true, 2); (false, 3) ], (snd output).choice)
 
 [<Fact>]
 let ``First round`` () =
     let monkeys = parseMonkeys input
-    let newMonkeys = round (fun _ _ -> ()) monkeys
-    Assert.Equal<int>([ 20; 23; 27; 26 ], newMonkeys.[0].items)
-    Assert.Equal<int>([ 2080; 25; 167; 207; 401; 1046 ], newMonkeys.[1].items)
-    Assert.Equal<int>(List.empty, newMonkeys.[2].items)
-    Assert.Equal<int>(List.empty, newMonkeys.[3].items)
+    let newMonkeys = round (fun _ _ -> ()) (fun item -> item / 3L) monkeys
+    Assert.Equal<Int64>([ 20L; 23; 27; 26 ], newMonkeys.[0].items)
+    Assert.Equal<Int64>([ 2080L; 25; 167; 207; 401; 1046 ], newMonkeys.[1].items)
+    Assert.Equal<Int64>(List.empty, newMonkeys.[2].items)
+    Assert.Equal<Int64>(List.empty, newMonkeys.[3].items)
 
 [<Fact>]
-let ``First answer`` () = Assert.Equal(101*105, answer1 input)
+let ``First answer`` () =
+    Assert.Equal(101L * 105L, answer1 input)
 
 [<Fact>]
-let ``Second answer`` () = Assert.Equal(99 * 103, answer2 input)
+let ``Second answer`` () =
+    Assert.Equal(52166L * 52013L, answer2 input)
