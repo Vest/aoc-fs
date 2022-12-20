@@ -39,3 +39,13 @@ let ``Find neighbours`` () =
         Set.empty.Add({ row = 1; col = 0 }).Add({ row = 0; col = 1 }),
         gatherNeighbours input { row = 0; col = 0 }
     )
+
+    Assert.Equal<Coord>(
+        Set
+            .empty
+            .Add({ row = 2; col = 5 })
+            .Add({ row = 2; col = 3 })
+            .Add({ row = 1; col = 4 })
+            .Add({ row = 3; col = 4 }),
+        gatherNeighbours input { row = 2; col = 4 }
+    )
