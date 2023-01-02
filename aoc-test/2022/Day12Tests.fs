@@ -49,3 +49,9 @@ let ``Find neighbours`` () =
             .Add({ row = 3; col = 4 }),
         gatherNeighbours input { row = 2; col = 4 }
     )
+
+[<Fact>]
+let ``Make Step`` () =
+    let input = parseLandToArray input
+    let output = makeStep [ { row = 0; col = 0 } ] input
+    Assert.True(canMove 'a' 'a')

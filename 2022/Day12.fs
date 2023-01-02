@@ -34,7 +34,7 @@ let internal canMove (fromC: char) (toC: char) : bool =
     || (fromC = 'z' && toC = 'E')
     || (fromC = 'S' && toC = 'a')
 
-let internal gatherNeighbours (map: char[][]) (coord: Coord) : (Set<Coord>) =
+let internal gatherNeighbours (map: char[][]) (coord: Coord) : Set<Coord> =
     let fromChar: char = map[coord.row][coord.col]
     let height = map |> Array.length
     let width = map[0] |> Array.length
@@ -51,5 +51,26 @@ let internal gatherNeighbours (map: char[][]) (coord: Coord) : (Set<Coord>) =
     |> List.map (fun ((row, col), _) -> { row = row; col = col })
     |> Set.ofList
 
-let answer1 input = 0
+let rec internal makeStep (path: Coord list) (map: char[][]) : Set<Coord list> =
+    let lastStep: Coord = List.last path
+
+    let neighbours =
+        gatherNeighbours map lastStep
+        |> Set.map (fun step ->
+            if map[step.row][step.col] = 'E' then
+                printfn "Found 'E': %i" path.Length
+
+            step)
+        |> Set.filter (fun step -> path |> List.contains step |> not)
+        |> Set.map (fun step -> path @ [ step ])
+        |> Set.map (fun path -> makeStep path map)
+        |> Set.fold (fun acc path -> Set.union acc path) Set.empty
+
+    neighbours
+
+let answer1 input =
+    let input = parseLandToArray input
+    let output = makeStep [ { row = 20; col = 0 } ] input
+    0
+
 let answer2 input = 0
